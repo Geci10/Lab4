@@ -25,6 +25,9 @@
                             Cars
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link ${activePage == 'Users' ? 'active' : ''}" href="/Users">Users</a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link disabled" aria-disabled="true">Disabled</a>

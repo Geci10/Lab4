@@ -26,7 +26,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link ${activePage == 'Users' ? 'active' : ''}" href="/Users">Users</a>
+                        <a class="nav-link ${activePage == 'Users' ? 'active' : ''}"
+                           href="${pageContext.request.contextPath}/Users">
+                            Users
+                        </a>
+
                     </li>
 
                     <li class="nav-item">

@@ -6,13 +6,14 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "Cars", value = "/Cars")
 public class Cars extends HttpServlet {
 
     @Inject
-    private CarsBean carsBean;   // <-- CORRECT
+    private CarsBean carsBean;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -26,4 +27,21 @@ public class Cars extends HttpServlet {
 
         request.getRequestDispatcher("/WEB-INF/pages/cars.jsp").forward(request, response);
     }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String[] carIdsString = request.getParameterValues("car_ids");
+
+        if (carIdsString != null) {
+            List<Long> carIds = new ArrayList<>();
+            for (String id : carIdsString) {
+                carIds.add(Long.parseLong(id));
+            }
+            carsBean.deleteCarsByIds(carIds);
+        }
+
+        response.sendRedirect(request.getContextPath() + "/Cars");
+    }
+
 }

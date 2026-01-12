@@ -5,12 +5,15 @@ import com.example.parkinglot.ejb.UsersBean;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.annotation.ServletSecurity;
+import jakarta.servlet.annotation.HttpConstraint;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"WRITE_CARS"}))
 @WebServlet(name = "AddCar", value = "/AddCar")
 public class AddCar extends HttpServlet {
 
@@ -20,12 +23,10 @@ public class AddCar extends HttpServlet {
     @Inject
     private UsersBean usersBean;
 
-    // Show the form
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // get all users for the dropdown
         request.setAttribute("users", usersBean.findAllUsers());
         request.setAttribute("activePage", "Cars");
 
@@ -33,15 +34,12 @@ public class AddCar extends HttpServlet {
                 .forward(request, response);
     }
 
-    // Process form submission
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
         String licensePlate = request.getParameter("license_plate");
         String parkingSpot = request.getParameter("parking_spot");
-
         Long userId = Long.parseLong(request.getParameter("owner_id"));
 
         carsBean.createCar(licensePlate, parkingSpot, userId);

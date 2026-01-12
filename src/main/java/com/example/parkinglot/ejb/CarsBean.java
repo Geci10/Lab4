@@ -45,22 +45,19 @@ public class CarsBean {
     }
     public void createCar(String licensePlate, String parkingSpot, Long userId) {
         try {
-            // Find the user by ID
+
             User owner = entityManager.find(User.class, userId);
             if (owner == null) {
                 throw new EJBException("No user found with ID: " + userId);
             }
 
-            // Create and populate new Car entity
             Car car = new Car();
             car.setLicensePlate(licensePlate);
             car.setParkingSpot(parkingSpot);
             car.setOwner(owner);
 
-            // OPTIONAL: maintain bidirectional relationship if User has List<Car>
             owner.getCars().add(car);
 
-            // Persist new car in DB
             entityManager.persist(car);
 
         } catch (Exception ex) {
@@ -71,8 +68,7 @@ public class CarsBean {
         public CarDto findById(Long carId) {
             Car car = entityManager.find(Car.class, carId);
             if (car == null) {
-                return null; // or throw new EJBException("Car not found");
-            }
+                return null;        }
 
             return new CarDto(
                     car.getId(),
@@ -93,12 +89,11 @@ public class CarsBean {
                 throw new EJBException("User not found with id: " + ownerId);
             }
 
-            // Update fields
+
             car.setLicensePlate(licensePlate);
             car.setParkingSpot(parkingSpot);
             car.setOwner(owner);
 
-            // entityManager.merge(car); <-- NOT needed because the entity is already managed
 
         } catch (Exception ex) {
             throw new EJBException(ex);
